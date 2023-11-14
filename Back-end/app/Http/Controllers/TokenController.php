@@ -15,15 +15,7 @@ class TokenController extends Controller
 {
     /**
      *
-     *
-     *
-     *
-     *
-     * TODO : Publicaciones opcional subida de imagenes - Amazon S3
-     * TODO : Hacer logging de los cambios efectuados en projectos por administrador.
      * TODO : Servicio de mailing, el cual una de sus funcionalidades es recuperar contraseña.
-     *
-     *
      *
      */
 
@@ -42,8 +34,8 @@ class TokenController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make(($request->password)),
+            'token_update_date' => now(),
         ]);
-
         $token = JWTAuth::fromUser($admin);
         return response()->json([
             'status' => 'success',
@@ -71,11 +63,23 @@ class TokenController extends Controller
     }
 
     public function change_password(Request $request){
-        $request->only('password');
 
-        return "Password succesfully changed";
+        $admin = Auth::guard('api')->user();
+        $newPassword = $request->input('new_password');
+
+
+        $admin->password = Hash::make($newPassword);
+        $admin->token_update_date = now();
+
+        $admin->save();
+
+        return "Password successfully changed";
     }
 
+    public function remember_password(){
+
+        return "email sent";
+    }
     public function me()
     {
         return response()->json(auth()->user());

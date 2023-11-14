@@ -26,6 +26,8 @@ Route::group([
     Route::post('/logout', [TokenController::class, 'logout']);
     Route::post('/refresh', [TokenController::class, 'refresh']);
     Route::get('/user-profile', [TokenController::class, 'userProfile']);
+    Route::post('/change_password', [TokenController::class, 'change_password']);
+
     Route::get('/test', function () {
         return "Hola";
     })->middleware('auth.jwt');
