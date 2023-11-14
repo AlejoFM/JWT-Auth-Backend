@@ -32,6 +32,10 @@ Route::group([
         return "Hola";
     })->middleware('auth.jwt');
 
+    Route::post('/forgot-password', [TokenController::class, 'sendPasswordResetEmail']);
+    Route::post('/reset-password/{token}', [TokenController::class, 'resetPassword']);
+
+
     Route::get('/projects', [ProjectController::class, 'index']);
     Route::get('/projects/category', [CategoryController::class, 'index']);
     Route::get('/projects/{id}/', [ProjectController::class, 'show']);
